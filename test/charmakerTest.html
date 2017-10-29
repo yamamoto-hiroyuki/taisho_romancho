@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>test for charmaker.js</title>
+    <meta charset="utf-8">
+    <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+</head>
+
+<body>
+    <div id="category">
+        <img class="category" id="hair" src="images/hair.png">
+        <img class="category" id="cloth" src="images/cloth.png">
+        <img class="category" id="shoe" src="images/shoe.png">
+        <img class="category" id="face" src="images/face.png">
+        <img class="category" id="acce" src="images/acce.png">
+    </div>
+    <div id="hair">
+        <img class="hair" id="hair1" src="images/hair1.png">
+        <img class="hair" id="hair2" src="images/hair2.png">
+        <img class="hair" id="hair3" src="images/hair3.png">
+        <img class="hair" id="hair4" src="images/hair4.png">
+        <img class="hair" id="hair5" src="images/hair5.png">
+    </div>
+    <div>
+        <span>カテゴリー：</span>
+        <span id="currentCategory"></span>
+    </div>
+    <div>
+        <span>アイテム：</span>
+        <span id="currentItem"></span>
+    </div>
+    <div>
+        <input type="button" id="create_button" value="create">
+        <!-- a id='id3917201d6d9a31b1e70b79a71b243b27'>x</a -->
+        <input type="button" id="save_button" value="save">
+    </div>
+    <div>
+        <canvas id="targetCanvas" width="32px" height="32px"></canvas>
+    </div>
+</body>
+<script src="../charmaker.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".category").on("click", function () {
+            setTimeout(function () {
+                $("#currentCategory").text("").text($(".category[" + haikara_club.selectedAttributeName + "]").attr("id"));
+            }, 10);
+            return true;
+        });
+        $(".hair").on("click", function () {
+            setTimeout(function () {
+                $("#currentItem").text("").text($(".hair[" + haikara_club.selectedAttributeName + "]").attr("id"));
+            }, 10);
+            return true;
+        });
+        haikara_club.init(document, "category");
+        $("#create_button").on("click", function () {
+            haikara_club.makeImage(document.getElementById("targetCanvas"));
+        });
+        $("#save_button").on("click", function () {
+            haikara_club.download(document.getElementById("targetCanvas"));
+        });
+    });
+</script>
+</html>
