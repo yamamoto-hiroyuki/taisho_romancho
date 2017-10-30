@@ -16,6 +16,13 @@ var haikara_club = {
      * 内部的に使用するダウンロードリンクa要素のid（重複がないような名前を付けました）
      */
     , downLoadLinkID: "id3917201d6d9a31b1e70b79a71b243b27"
+
+    /**
+     * サムネイル画像のsrcから取得したパスをフルサイズ画像のパスに変換するための正規表現と置換文字列
+     */
+    , regexpToConvertThambnailToFullsize: "_thumbnail"
+    , replacementToConvertThambnailToFullsize: "_fullsize"
+    
 };
 
 /**
@@ -25,9 +32,12 @@ var haikara_club = {
 haikara_club.makeImage = function (dest) {
     var context = dest.getContext("2d");
     context.clearRect(0, 0, dest.width, dest.height);
-    $("[" + haikara_club.selectedAttributeName + "]").each(function (i, element) {
-        console.log("haikara_club.makeImage", i, element);
-        context.drawImage(element, 0, 0, element.width, element.height);
+    $("[" + haikara_club.selectedAttributeName + "]").each(function (i, x) {
+        var srcFullSize = x.src.replace(haikara_club.regexpToConvertThambnailToFullsize, haikara_club.replacementToConvertThambnailToFullsize);
+        console.log("haikara_club.makeImage()#1", i, x, srcFullSize);
+        var img = new Image(dest.width, dest.height);
+        img.src = srcFullSize;
+        context.drawImage(img, 0, 0, img.width, img.height);
     });
     $("#" + haikara_club.downLoadLinkID)
         .attr("href", dest.toDataURL())
@@ -44,39 +54,33 @@ haikara_club.download = function (src) {
 };
 
 /**
- * 指定されたグループを初期化します。
- * 具体的には、clickイベントハンドラを設定し、そのうちの１要素のみを選択できるようにします。
- * @param {collection<jQueryObject>} target 対象要素のjQueryオブジェクトのコレクション
- */
-haikara_club.initGroup = function (targets) {
-    console.log("haikara_club.initGroup", targets);
-    targets.on("click", function (e) {
-        // 後で利用するために、クリックされた要素がすでに選択済かどうかを覚えておきます
-        var preSelected = $(e.target).attr(haikara_club.selectedAttributeName);
-        // グループ内のすべての要素の選択属性をクリアします。
-        targets.removeAttr(haikara_club.selectedAttributeName);
-        // 最初に未選択だったならクリックされた要素を選択済にします（最初に選択済なら選択解除になります）
-        if (!preSelected) {
-            $(e.target).attr(haikara_club.selectedAttributeName, true);
-        }
-        return true;
-    });
-};
-
-/**
  * haikara_clubオブジェクトを初期化します。
- * @param {Document} document 
- * @param {string} categoryClassName  パーツカテゴリの各要素に共通でつけられたクラス名
  */
-haikara_club.init = function (doc, categoryClassName) {
-    console.log("haikara_club.init", categoryClassName);
-    haikara_club.categoryClassName = categoryClassName;
+haikara_club.init = function () {
+    console.log("haikara_club.init()");
 
-    $("<a id='" + haikara_club.downLoadLinkID + "'>x</a>").appendTo("body", doc).hide();
-    
-    var targets = $("." + haikara_club.categoryClassName)
-    haikara_club.initGroup(targets);
-    targets.each(function (i, elm) {
-        haikara_club.initGroup($("." + $(elm).attr("id")));
+    // charmaker_userconfigに定義されたサムネイル群に対する初期設定
+    $.each(charmaker_userconfig.targets, function (i, x) {
+        console.log("haikara_club.init()", i, x);
+        var targets = $(x.selector);
+        targets.on("click", function(e) {
+            console.log("on(click)", e);
+            // クリックされた要素がすでに選択済かどうかを覚えておきます
+            var preSelected = $(e.target).attr(haikara_club.selectedAttributeName);
+            // グループ内のすべての要素の選択属性をクリアします。
+            targets.removeAttr(haikara_club.selectedAttributeName);
+            // 最初に未選択だったならクリックされた要素を選択済にします（最初に選択済なら選択解除になります）
+            if (!preSelected) {
+                $(e.target).attr(haikara_club.selectedAttributeName, true);
+            }
+            return true;
+        });
     });
+
+    // ダウンロード用に必要なa要素の設定
+    $("<a id='" + haikara_club.downLoadLinkID + "'>x</a>").appendTo("body", document).hide();
 };
+
+$(document).ready(function () {
+    haikara_club.init();
+});

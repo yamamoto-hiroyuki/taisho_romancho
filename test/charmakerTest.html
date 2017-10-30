@@ -8,53 +8,36 @@
 </head>
 
 <body>
-    <div id="category">
-        <img class="category" id="hair" src="images/hair.png">
-        <img class="category" id="cloth" src="images/cloth.png">
-        <img class="category" id="shoe" src="images/shoe.png">
-        <img class="category" id="face" src="images/face.png">
-        <img class="category" id="acce" src="images/acce.png">
-    </div>
     <div id="hair">
-        <img class="hair" id="hair1" src="images/hair1.png">
-        <img class="hair" id="hair2" src="images/hair2.png">
-        <img class="hair" id="hair3" src="images/hair3.png">
-        <img class="hair" id="hair4" src="images/hair4.png">
-        <img class="hair" id="hair5" src="images/hair5.png">
+        <img id="hair1" src="images/hair1_thumbnail.png">
+        <img id="hair2" src="images/hair2_thumbnail.png">
+        <img id="hair3" src="images/hair3_thumbnail.png">
     </div>
-    <div>
-        <span>カテゴリー：</span>
-        <span id="currentCategory"></span>
+    <div id="cloth">
+        <img id="cloth1" src="images/cloth1_thumbnail.png">
+        <img id="cloth2" src="images/cloth2_thumbnail.png">
+        <img id="cloth3" src="images/cloth3_thumbnail.png">
     </div>
-    <div>
-        <span>アイテム：</span>
-        <span id="currentItem"></span>
+    <div style="display:none">
+            <img src="images/hair1_fullsize.png">
+            <img src="images/hair2_fullsize.png">
+            <img src="images/hair3_fullsize.png">
+            <img src="images/cloth1_fullsize.png">
+            <img src="images/cloth2_fullsize.png">
+            <img src="images/cloth3_fullsize.png">
     </div>
     <div>
         <input type="button" id="create_button" value="create">
-        <!-- a id='id3917201d6d9a31b1e70b79a71b243b27'>x</a -->
         <input type="button" id="save_button" value="save">
     </div>
     <div>
-        <canvas id="targetCanvas" width="32px" height="32px"></canvas>
+        <canvas id="targetCanvas" width="240px" height="240px"></canvas>
     </div>
 </body>
+<script src="charmaker_userconfig.js"></script>
 <script src="../charmaker.js"></script>
 <script>
     $(document).ready(function () {
-        $(".category").on("click", function () {
-            setTimeout(function () {
-                $("#currentCategory").text("").text($(".category[" + haikara_club.selectedAttributeName + "]").attr("id"));
-            }, 10);
-            return true;
-        });
-        $(".hair").on("click", function () {
-            setTimeout(function () {
-                $("#currentItem").text("").text($(".hair[" + haikara_club.selectedAttributeName + "]").attr("id"));
-            }, 10);
-            return true;
-        });
-        haikara_club.init(document, "category");
         $("#create_button").on("click", function () {
             haikara_club.makeImage(document.getElementById("targetCanvas"));
         });
