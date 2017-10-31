@@ -53,6 +53,8 @@ haikara_club.download = function (src) {
     a[0].click();
 };
 
+
+
 /**
  * haikara_clubオブジェクトを初期化します。
  */
@@ -79,8 +81,24 @@ haikara_club.init = function () {
 
     // ダウンロード用に必要なa要素の設定
     $("<a id='" + haikara_club.downLoadLinkID + "'>x</a>").appendTo("body", document).hide();
+
+    // 重ね合わせ画像生成イベントトリガー設定とイベント発生時処理
+    $(charmaker_userconfig.createEventSource.selector).
+        on(charmaker_userconfig.createEventSource.eventName, 
+            function () {
+                haikara_club.makeImage(document.getElementById("targetCanvas"));
+            });
+
+    // 画像ダウンロードイベントトリガー設定とイベント発生時処理
+    $(charmaker_userconfig.downloadEventSource.selector).
+        on(charmaker_userconfig.downloadEventSource.eventName, 
+            function () {
+                haikara_club.download(document.getElementById("targetCanvas"));
+            });
+
 };
 
+// 読み込み元のドキュメントready時にオブジェクトを初期化します。
 $(document).ready(function () {
     haikara_club.init();
 });
