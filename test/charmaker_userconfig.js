@@ -39,5 +39,12 @@ var charmaker_userconfig = {
          * トリガーイベント名
          */
         eventName: "click"
+    },
+
+    /**
+     * 重ねあわせ先のcanvasの情報。
+     */
+    targetCanvas: {
+        id: "targetCanvas"
     }
 };

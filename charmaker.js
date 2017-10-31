@@ -17,7 +17,12 @@ var charmaker = {
      * 正規表現と置換文字列
      */
     regexpToConvertThambnailToFullsize: "_thumbnail",
-    replacementToConvertThambnailToFullsize: "_fullsize"
+    replacementToConvertThambnailToFullsize: "_fullsize",
+
+    fullsizeSrc: function (thumbnailSrc) {
+        return thumbnailSrc.replace(charmaker.regexpToConvertThambnailToFullsize, 
+            charmaker.replacementToConvertThambnailToFullsize);
+    }
 };
 
 /**
@@ -25,18 +30,24 @@ var charmaker = {
  * @param {canvas} dest 作成先canvas要素
  */
 charmaker.makeImage = function (dest) {
+    // 出力先canvasのコンテキストの初期化
     var context = dest.getContext("2d");
     context.clearRect(0, 0, dest.width, dest.height);
-    $("[" + charmaker.selectedAttributeName + "]").each(function (i, x) {
-        var srcFullSize = x.src.replace(charmaker.regexpToConvertThambnailToFullsize, charmaker.replacementToConvertThambnailToFullsize);
-        console.log("charmaker.makeImage()#1", i, x, srcFullSize);
-        var img = new Image(dest.width, dest.height);
-        img.src = srcFullSize;
-        context.drawImage(img, 0, 0, img.width, img.height);
+
+    // 対象画像をグループ宣言順に処理する
+    $.each(charmaker_userconfig.targets, function (i, t) {
+        $(t.selector).filter("[" + charmaker.selectedAttributeName + "]").each(function (j, x) {
+            var srcFullSize = charmaker.fullsizeSrc(x.src);
+            console.log("charmaker.makeImage()#1", j, x, srcFullSize);
+            var img = new Image(dest.width, dest.height);
+            img.src = srcFullSize;
+            context.drawImage(img, 0, 0, img.width, img.height);
+        });
     });
+
     $("#" + charmaker.downLoadLinkID)
-        .attr("href", dest.toDataURL())
-        .attr("download", "mypic.png");
+            .attr("href", dest.toDataURL())
+            .attr("download", "mypic.png");
 };
 
 /**
@@ -58,7 +69,7 @@ charmaker.init = function () {
     $.each(charmaker_userconfig.targets, function (i, x) {
         console.log("charmaker.init()", i, x);
         var targets = $(x.selector);
-        targets.on("click", function(e) {
+        targets.on("click", function (e) {
             console.log("on(click)", e);
             // クリックされた要素がすでに選択済かどうかを覚えておきます
             var preSelected = $(e.target).attr(charmaker.selectedAttributeName);
@@ -77,17 +88,17 @@ charmaker.init = function () {
 
     // 重ね合わせ画像生成イベントトリガー設定とイベント発生時処理
     $(charmaker_userconfig.createEventSource.selector).
-        on(charmaker_userconfig.createEventSource.eventName, 
-            function () {
-                charmaker.makeImage(document.getElementById("targetCanvas"));
-            });
+        on(charmaker_userconfig.createEventSource.eventName,
+        function () {
+            charmaker.makeImage(document.getElementById(charmaker_userconfig.targetCanvas.id));
+        });
 
     // 画像ダウンロードイベントトリガー設定とイベント発生時処理
     $(charmaker_userconfig.downloadEventSource.selector).
-        on(charmaker_userconfig.downloadEventSource.eventName, 
-            function () {
-                charmaker.download(document.getElementById("targetCanvas"));
-            });
+        on(charmaker_userconfig.downloadEventSource.eventName,
+        function () {
+            charmaker.download(document.getElementById(charmaker_userconfig.targetCanvas.id));
+        });
 
 };
 
