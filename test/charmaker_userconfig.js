@@ -13,19 +13,6 @@ var charmaker_userconfig = {
             selector: "#cloth1, #cloth2, #cloth3, #cloth4, #cloth5"
         }
     ],
-    /**
-     * 重ねあわせ画像生成イベントの発生元オブジェクトの情報を記述します。
-     */
-    createEventSource: {
-        /**
-         * セレクタ
-         */
-        selector : "#create",
-        /**
-         * セレクタ
-         */
-        eventName: "click"
-    },
 
     /**
      * 重ねあわせ画像ダウンロードイベントの発生元オブジェクトの情報。

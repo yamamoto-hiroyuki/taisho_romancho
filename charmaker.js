@@ -92,13 +92,6 @@ charmaker.init = function () {
     // ダウンロード用に必要なa要素の設定
     $("<a id='" + charmaker.downLoadLinkID + "'>x</a>").appendTo("body", document).hide();
 
-    // 重ね合わせ画像生成イベントトリガー設定とイベント発生時処理
-    $(charmaker_userconfig.createEventSource.selector).
-        on(charmaker_userconfig.createEventSource.eventName,
-        function () {
-            charmaker.makeImage(document.getElementById(charmaker_userconfig.targetCanvas.id));
-        });
-
     // 画像ダウンロードイベントトリガー設定とイベント発生時処理
     $(charmaker_userconfig.downloadEventSource.selector).
         on(charmaker_userconfig.downloadEventSource.eventName,
