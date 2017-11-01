@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>test for charmaker.js</title>
+    <meta charset="utf-8">
+    <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+</head>
+
+<body>
+    <div id="hair">
+        <img id="hair1" src="images/hair1_thumbnail.png">
+        <img id="hair2" src="images/hair2_thumbnail.png">
+        <img id="hair3" src="images/hair3_thumbnail.png">
+    </div>
+    <div id="cloth">
+        <img id="cloth1" src="images/cloth1_thumbnail.png">
+        <img id="cloth2" src="images/cloth2_thumbnail.png">
+        <img id="cloth3" src="images/cloth3_thumbnail.png">
+    </div>
+    <div style="display:none">
+            <img src="images/hair1_fullsize.png">
+            <img src="images/hair2_fullsize.png">
+            <img src="images/hair3_fullsize.png">
+            <img src="images/cloth1_fullsize.png">
+            <img src="images/cloth2_fullsize.png">
+            <img src="images/cloth3_fullsize.png">
+    </div>
+    <div>
+        <input type="button" id="create" value="create image">
+        <input type="button" id="download" value="save">
+    </div>
+    <div>
+        <canvas id="targetCanvas" width="240px" height="240px"></canvas>
+    </div>
+</body>
+<script src="charmaker_userconfig.js"></script>
+<script src="../charmaker.js"></script>
+</html>
