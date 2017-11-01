@@ -46,5 +46,12 @@ var charmaker_userconfig = {
      */
     targetCanvas: {
         id: "targetCanvas"
+    },
+
+    /**
+     * 重ね合わせの背景画像の指定（省略可）
+     */
+    backgroundImage: {
+        src: "images/background.png"
     }
 };
