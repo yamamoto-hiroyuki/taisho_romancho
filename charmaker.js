@@ -86,6 +86,8 @@ charmaker.init = function () {
             if (!preSelected) {
                 $(e.target).attr(charmaker.selectedAttributeName, true);
             }
+            // 選択が変更されるたびに、重ね合わせ画像を再作成します。
+            charmaker.makeImage(document.getElementById(charmaker_userconfig.targetCanvas.id));
             return true;
         });
     });
