@@ -31,8 +31,10 @@ charmaker.makeImage = function (dest) {
     // バックグラウンド画像の指定があれば読み込む
     if (charmaker_userconfig.backgroundImage && charmaker_userconfig.backgroundImage.src) {
         var img = new Image(dest.width, dest.height);
+        img.onload = function() {
+            context.drawImage(img, 0, 0, img.width, img.height);
+        };
         img.src = charmaker_userconfig.backgroundImage.src;
-        context.drawImage(img, 0, 0, img.width, img.height);
     }
 
     // 対象画像をグループ宣言順に処理する
@@ -41,8 +43,10 @@ charmaker.makeImage = function (dest) {
             // サムネイル画像のsrcからフルサイズ画像のsrcを取得
             var srcFullSize = charmaker.fullsizeSrc(x.src);
             var img = new Image(dest.width, dest.height);
+            img.onload = function() {
+                context.drawImage(img, 0, 0, img.width, img.height);
+            };
             img.src = srcFullSize;
-            context.drawImage(img, 0, 0, img.width, img.height);
         });
     });
 
