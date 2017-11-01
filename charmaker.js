@@ -12,16 +12,10 @@ var charmaker = {
      */
     downLoadLinkID: "id3917201d6d9a31b1e70b79a71b243b27",
 
-    /**
-     * サムネイル画像のsrcから取得したパスをフルサイズ画像のパスに変換するための、
-     * 正規表現と置換文字列
-     */
-    regexpToConvertThambnailToFullsize: "_thumbnail",
-    replacementToConvertThambnailToFullsize: "_fullsize",
 
     fullsizeSrc: function (thumbnailSrc) {
-        return thumbnailSrc.replace(charmaker.regexpToConvertThambnailToFullsize, 
-            charmaker.replacementToConvertThambnailToFullsize);
+        return thumbnailSrc.replace(charmaker_userconfig.regexpToConvertThambnailToFullsize, 
+            charmaker_userconfig.replacementToConvertThambnailToFullsize);
     }
 };
 
