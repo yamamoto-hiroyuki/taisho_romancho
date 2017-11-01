@@ -53,5 +53,19 @@ var charmaker_userconfig = {
      */
     backgroundImage: {
         src: "images/background.png"
-    }
+    },
+
+    /**
+     * サムネイル画像のsrcから取得したパスをフルサイズ画像のパスに変換するための、
+     * 正規表現
+     */
+    regexpToConvertThambnailToFullsize: "images/",
+
+    /**
+     * サムネイル画像のsrcから取得したパスをフルサイズ画像のパスに変換するための、
+     * 置換文字列
+     */
+    replacementToConvertThambnailToFullsize: "images/fullsize/"
+
+
 };
