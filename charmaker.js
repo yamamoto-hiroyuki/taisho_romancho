@@ -70,6 +70,9 @@ charmaker.init = function () {
     $.each(charmaker_userconfig.targets, function (i, x) {
         console.log("charmaker.init()", i, x);
         var targets = $(x.selector);
+        // 各グループの最初のセレクタで選ばれる要素群のひとつを選択状態にします。
+        targets.eq(0).attr(charmaker.selectedAttributeName, true);
+        // グループ毎にclickハンドラを設定
         targets.on("click", function (e) {
             console.log("on(click)", e);
             // クリックされた要素がすでに選択済かどうかを覚えておきます
@@ -108,4 +111,6 @@ charmaker.init = function () {
 // 読み込み元のドキュメントready時にオブジェクトを初期化します。
 $(document).ready(function () {
     charmaker.init();
+    // 初期選択されたパーツで初期画像をキャンバスに描画します
+    charmaker.makeImage(document.getElementById(charmaker_userconfig.targetCanvas.id));
 });
