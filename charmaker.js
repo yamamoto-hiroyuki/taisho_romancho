@@ -13,10 +13,12 @@ var charmaker = {
     downLoadLinkID: "id3917201d6d9a31b1e70b79a71b243b27",
 
 
-    fullsizeSrc: function (thumbnailSrc) {
-        return thumbnailSrc.replace(charmaker_userconfig.regexpToConvertThambnailToFullsize, 
+    getFullsizeSrc: function (thumbnailSrc) {
+        var result = thumbnailSrc.replace(charmaker_userconfig.regexpToConvertThambnailToFullsize, 
             charmaker_userconfig.replacementToConvertThambnailToFullsize);
-    }
+            console.log("getFullsizeSrc", thumbnailSrc, result);
+            return result
+        }
 };
 
 /**
@@ -24,6 +26,8 @@ var charmaker = {
  * @param {canvas} dest 作成先canvas要素
  */
 charmaker.makeImage = function (dest) {
+    console.log("charmaker.makeImage", dest);
+
     // 出力先canvasのコンテキストの初期化
     var context = dest.getContext("2d");
     context.clearRect(0, 0, dest.width, dest.height);
@@ -41,18 +45,19 @@ charmaker.makeImage = function (dest) {
     $.each(charmaker_userconfig.targets, function (i, t) {
         $(t.selector).filter("[" + charmaker.selectedAttributeName + "=true]").each(function (j, x) {
             // サムネイル画像のsrcからフルサイズ画像のsrcを取得
-            var srcFullSize = charmaker.fullsizeSrc(x.src);
+            var srcFullSize = charmaker.getFullsizeSrc(
+                $(x).css("background-image").replace(/^url\("?/, "").replace(/"?\)$/, "")); //.replace(/\?[^\?*]$/, ""));
             var img = new Image(dest.width, dest.height);
             img.onload = function() {
                 context.drawImage(img, 0, 0, img.width, img.height);
+                $("#" + charmaker.downLoadLinkID)
+                    .attr("href", dest.toDataURL())
+                    .attr("download", "mypic.png");
             };
             img.src = srcFullSize;
         });
     });
 
-    $("#" + charmaker.downLoadLinkID)
-            .attr("href", dest.toDataURL())
-            .attr("download", "mypic.png");
 };
 
 /**

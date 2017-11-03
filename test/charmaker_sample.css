@@ -1,0 +1,41 @@
+#hair1 {
+    width: 80px;
+    height: 80px;
+    float: left;
+    background-image:url("images/hair1.png");
+}
+#hair2 {
+    width: 80px;
+    height: 80px; 
+    float: left;
+    background-image:url("images/hair2.png");
+}
+#hair3 {
+    width: 80px;
+    height: 80px; 
+    float: left;
+    background-image:url("images/hair3.png");
+}
+
+#cloth1 {
+    width: 80px;
+    height: 80px; 
+    float: left;
+    background-image:url("images/cloth1.png");
+}
+#cloth2 {
+    width: 80px;
+    height: 80px; 
+    float: left;
+    background-image:url("images/cloth2.png");
+}
+#cloth3 {
+    width: 80px;
+    height: 80px; 
+    float: left;
+    background-image:url("images/cloth3.png");
+}
+
+.clear {
+    clear: both;
+}

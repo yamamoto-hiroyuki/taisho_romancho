@@ -7,12 +7,12 @@ var charmaker_userconfig = {
      */
     targets: [
         {
-            selector: "img[src*='hair']",
+            selector: "#hair1,#hair2,#hair3",
             selectionRule: "oneAndOnlyOne",
             initialSelectedIndex: 0
         },
         {
-            selector: "img[src*='cloth']",
+            selector: "#cloth1,#cloth2,#cloth3",
             selectionRule: "moreThanZero"
         }
     ],
@@ -49,13 +49,13 @@ var charmaker_userconfig = {
      * サムネイル画像のsrcから取得したパスをフルサイズ画像のパスに変換するための、
      * 正規表現
      */
-    regexpToConvertThambnailToFullsize: "images/",
+    regexpToConvertThambnailToFullsize: "/images/",
 
     /**
      * サムネイル画像のsrcから取得したパスをフルサイズ画像のパスに変換するための、
      * 置換文字列
      */
-    replacementToConvertThambnailToFullsize: "images/fullsize/"
+    replacementToConvertThambnailToFullsize: "/images/fullsize/"
 
 
 };
