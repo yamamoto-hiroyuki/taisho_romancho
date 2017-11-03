@@ -39,7 +39,7 @@ charmaker.makeImage = function (dest) {
 
     // 対象画像をグループ宣言順に処理する
     $.each(charmaker_userconfig.targets, function (i, t) {
-        $(t.selector).filter("[" + charmaker.selectedAttributeName + "]").each(function (j, x) {
+        $(t.selector).filter("[" + charmaker.selectedAttributeName + "=true]").each(function (j, x) {
             // サムネイル画像のsrcからフルサイズ画像のsrcを取得
             var srcFullSize = charmaker.fullsizeSrc(x.src);
             var img = new Image(dest.width, dest.height);
@@ -74,18 +74,23 @@ charmaker.init = function () {
     $.each(charmaker_userconfig.targets, function (i, x) {
         console.log("charmaker.init()", i, x);
         var targets = $(x.selector);
-        // 各グループの最初のセレクタで選ばれる要素群のひとつを選択状態にします。
-        targets.eq(0).attr(charmaker.selectedAttributeName, true);
+        // 必ずひとつ選ぶ設定なら、指定されているもの（なければ適当に先頭を)選択状態にします。
+        if (x.selectionRule == "oneAndOnlyOne") {
+            targets.eq(x.initialSelectedIndex).attr(charmaker.selectedAttributeName, true);
+        }
         // グループ毎にclickハンドラを設定
         targets.on("click", function (e) {
             console.log("on(click)", e);
             // クリックされた要素がすでに選択済かどうかを覚えておきます
             var preSelected = $(e.target).attr(charmaker.selectedAttributeName);
-            // グループ内のすべての要素の選択属性をクリアします。
-            targets.removeAttr(charmaker.selectedAttributeName);
-            // 最初に未選択だったならクリックされた要素を選択済にします（最初に選択済なら選択解除になります）
-            if (!preSelected) {
-                $(e.target).attr(charmaker.selectedAttributeName, true);
+            if (x.selectionRule == "oneAndOnlyOne") {
+                // グループ内のすべての要素の選択属性をクリアします。
+                targets.removeAttr(charmaker.selectedAttributeName);
+                // クリックされた要素を選択済にします（最初に選択済なら結果的に変化なし）
+                   $(e.target).attr(charmaker.selectedAttributeName, true);
+            } else if (x.selectionRule == "moreThanZero") {
+                // 最初の選択状態の逆の状態を設定します。
+                $(e.target).attr(charmaker.selectedAttributeName, !preSelected);
             }
             // 選択が変更されるたびに、重ね合わせ画像を再作成します。
             charmaker.makeImage(document.getElementById(charmaker_userconfig.targetCanvas.id));
