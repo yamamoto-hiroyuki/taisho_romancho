@@ -26,7 +26,7 @@ var charmaker_userconfig = {
                 $(MEMBERS).each(function (i, x) {
                     // MEMBERSはファイル名だからパスの後半に合致すればマッチとみなす
                     console.log("isTarget", i, bgImgPath[1], x);
-                    if (bgImgPath[1].endsWith(x))  {
+                    if (bgImgPath[1].endsWith(encodeURI(x)))  {
                         result = true;
                     }
                 });
