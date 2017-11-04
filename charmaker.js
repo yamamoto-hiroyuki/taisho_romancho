@@ -14,11 +14,11 @@ var charmaker = {
 
 
     getFullsizeSrc: function (thumbnailSrc) {
-        var result = thumbnailSrc.replace(charmaker_userconfig.regexpToConvertThambnailToFullsize, 
+        var result = thumbnailSrc.replace(charmaker_userconfig.regexpToConvertThambnailToFullsize,
             charmaker_userconfig.replacementToConvertThambnailToFullsize);
-            console.log("getFullsizeSrc", thumbnailSrc, result);
-            return result
-        }
+        console.log("getFullsizeSrc", thumbnailSrc, result);
+        return result
+    }
 };
 
 /**
@@ -35,7 +35,7 @@ charmaker.makeImage = function (dest) {
     // バックグラウンド画像の指定があれば読み込む
     if (charmaker_userconfig.backgroundImage && charmaker_userconfig.backgroundImage.src) {
         var img = new Image(dest.width, dest.height);
-        img.onload = function() {
+        img.onload = function () {
             context.drawImage(img, 0, 0, img.width, img.height);
         };
         img.src = charmaker_userconfig.backgroundImage.src;
@@ -43,12 +43,12 @@ charmaker.makeImage = function (dest) {
 
     // 対象画像をグループ宣言順に処理する
     $.each(charmaker_userconfig.targets, function (i, t) {
-        $(t.selector).filter("[" + charmaker.selectedAttributeName + "=true]").each(function (j, x) {
+        $("[" + charmaker.selectedAttributeName + "=true]").each(function (j, x) {
             // サムネイル画像のsrcからフルサイズ画像のsrcを取得
             var srcFullSize = charmaker.getFullsizeSrc(
                 $(x).css("background-image").replace(/^url\("?/, "").replace(/"?\)$/, "")); //.replace(/\?[^\?*]$/, ""));
             var img = new Image(dest.width, dest.height);
-            img.onload = function() {
+            img.onload = function () {
                 context.drawImage(img, 0, 0, img.width, img.height);
                 $("#" + charmaker.downLoadLinkID)
                     .attr("href", dest.toDataURL())
@@ -77,9 +77,23 @@ charmaker.init = function () {
 
     // charmaker_userconfigに定義されたサムネイル群に対する初期設定
     $.each(charmaker_userconfig.targets, function (i, x) {
-        console.log("charmaker.init()", i, x);
-        var targets = $(x.selector);
+        console.log("charmaker.init", "a", i, x);
+        var targets = x.selector
+            ? $(x.selector)
+            : $("*");
+        console.log("charmaker.init", "c", i, targets.length, targets);
+        if (x.isTarget && typeof x.isTarget === "function") {
+            var tmp = targets.filter(function (j, y) {
+                var b = x.isTarget($(y));
+                console.log("charmaker.init", "d", j, y, b);
+                return b;
+            });
+            targets = tmp;
+        }
+        console.log("charmaker.init", "b", i, targets.length, targets);
+
         // 必ずひとつ選ぶ設定なら、指定されているもの（なければ適当に先頭を)選択状態にします。
+        // このときの「先頭」は内部的な並び上のもので、外部的には意味がありません。
         if (x.selectionRule == "oneAndOnlyOne") {
             targets.eq(x.initialSelectedIndex).attr(charmaker.selectedAttributeName, true);
         }
@@ -92,7 +106,7 @@ charmaker.init = function () {
                 // グループ内のすべての要素の選択属性をクリアします。
                 targets.removeAttr(charmaker.selectedAttributeName);
                 // クリックされた要素を選択済にします（最初に選択済なら結果的に変化なし）
-                   $(e.target).attr(charmaker.selectedAttributeName, true);
+                $(e.target).attr(charmaker.selectedAttributeName, true);
             } else if (x.selectionRule == "moreThanZero") {
                 // 最初の選択状態の逆の状態を設定します。
                 $(e.target).attr(charmaker.selectedAttributeName, !preSelected);
@@ -112,7 +126,6 @@ charmaker.init = function () {
         function () {
             charmaker.download(document.getElementById(charmaker_userconfig.targetCanvas.id));
         });
-
 };
 
 // 読み込み元のドキュメントready時にオブジェクトを初期化します。

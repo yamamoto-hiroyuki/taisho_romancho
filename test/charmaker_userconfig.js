@@ -1,9 +1,8 @@
 var charmaker_userconfig = {
     /**
      * パーツグループの定義
-     * グループ毎に、セレクタを記述します。
+     * グループ毎に、セレクタまたは判定関数を記述します。
      * グループ内の要素のclickイベントでその要素が選択されます。
-     * 選択はトグルで、かつグループ内の要素がひとつだけ選択可能です。
      */
     targets: [
         {
@@ -12,7 +11,27 @@ var charmaker_userconfig = {
             initialSelectedIndex: 0
         },
         {
-            selector: "#cloth1,#cloth2,#cloth3",
+            /**
+             * 渡されたelmがグループのメンバーかどうか判断します
+             * @param {jQuery-Object} elm 判定対象要素
+             */
+            isTarget: function (elm) {
+                const MEMBERS = ["cloth1.png", "cloth2.png", "cloth3.png"];
+                var bgImgPath = /url\("?([^"\)]+)"?\)/.exec(elm.css("background-image"));
+                // cssのbackground-imageを持っていないなら対象外
+                if (!bgImgPath) {
+                    return false;
+                }
+                var result = false;
+                $(MEMBERS).each(function (i, x) {
+                    // MEMBERSはファイル名だからパスの後半に合致すればマッチとみなす
+                    console.log("isTarget", i, bgImgPath[1], x);
+                    if (bgImgPath[1].endsWith(x))  {
+                        result = true;
+                    }
+                });
+                return result;
+            },
             selectionRule: "moreThanZero"
         }
     ],
