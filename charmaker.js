@@ -77,20 +77,15 @@ charmaker.init = function () {
 
     // charmaker_userconfigに定義されたサムネイル群に対する初期設定
     $.each(charmaker_userconfig.targets, function (i, x) {
-        console.log("charmaker.init", "a", i, x);
         var targets = x.selector
             ? $(x.selector)
             : $("*");
-        console.log("charmaker.init", "c", i, targets.length, targets);
         if (x.isTarget && typeof x.isTarget === "function") {
             var tmp = targets.filter(function (j, y) {
-                var b = x.isTarget($(y));
-                console.log("charmaker.init", "d", j, y, b);
-                return b;
+                return x.isTarget($(y));
             });
             targets = tmp;
         }
-        console.log("charmaker.init", "b", i, targets.length, targets);
 
         // 必ずひとつ選ぶ設定なら、指定されているもの（なければ適当に先頭を)選択状態にします。
         // このときの「先頭」は内部的な並び上のもので、外部的には意味がありません。
