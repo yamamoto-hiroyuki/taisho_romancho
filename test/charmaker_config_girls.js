@@ -98,13 +98,13 @@ var charmaker_userconfig = {
      * サムネイル画像のsrcから取得したパスをフルサイズ画像のパスに変換するための、
      * 変換元正規表現
      */
-    regexpToConvertThambnailToFullsize: /\/images\/([\w-\.]+)t\.png\?crc=\d+/,
+    regexpToConvertThambnailToFullsize: /images\/([\w-\.]+)t\.png/,
 
     /**
      * サムネイル画像のsrcから取得したパスをフルサイズ画像のパスに変換するための、
      * 置換文字列
      */
-    replacementToConvertThambnailToFullsize: "/images/fullsize/$1.png"
+    replacementToConvertThambnailToFullsize: "images/fullsize/$1.png"
 
 
 };

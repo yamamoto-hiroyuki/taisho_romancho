@@ -23,7 +23,9 @@ var charmaker = {
      * @param {string} thumbnailSrc サムネイル画像名
      */
     getFullsizeSrc: function (thumbnailSrc) {
-        var result = thumbnailSrc.replace(charmaker_userconfig.regexpToConvertThambnailToFullsize,
+        var matched = charmaker_userconfig.regexpToConvertThambnailToFullsize.exec(thumbnailSrc);
+        if (!matched) return null;
+        var result = matched[0].replace(charmaker_userconfig.regexpToConvertThambnailToFullsize,
             charmaker_userconfig.replacementToConvertThambnailToFullsize);
         console.log("getFullsizeSrc", thumbnailSrc, result);
         return result
@@ -39,12 +41,11 @@ charmaker.makeImage = function (dest) {
     console.log("charmaker.makeImage", dest);
 
     // 出力先canvasのコンテキストの初期化
-    var context = dest.getContext("2d");
+    var context = dest.getContext("2d"); 
     context.clearRect(0, 0, dest.width, dest.height);
 
     // グループ毎に画像を重ねていきます
     $.each(charmaker_userconfig.targets, function (i, t) {
-        console.log("charmaker.makeImage", "1", i, t);
 
         if (t.backgroudImages) {
             // このグループは背景画像グループなので、選択とか関係なしに描画します
@@ -65,29 +66,21 @@ charmaker.makeImage = function (dest) {
             // 現在のグループのセレクタで選ばれる要素群のうち、「選択済」のものを選んで、それらについて処理する
             $(t.selector).filter("[" + charmaker.selectedAttributeName + "=true]").each(function (j, x) {
 
-                console.log("charmaker.makeImage", "2", j, x);
                 // サムネイル画像のsrcからフルサイズ画像のsrcを取得
                 var srcFullSize = charmaker.getFullsizeSrc(
-                    $(x).css("background-image"));
+                    decodeURI($(x).css("background-image")));
                 // イメージを生成
                 var img = new Image(dest.width, dest.height);
-                console.log("charmaker.makeImage", "2.5", j);
+                img.crossOrigin = "anonymous";
                 img.onload = function () {
                     // img.srcの設定は非同期処理になるため、続きの処理はloadedハンドラで処理
                     // canvasのcontextに描き込み
                     context.drawImage(img, 0, 0, img.width, img.height);
-                    // ダウンロードリンクの更新。本当は全部の画面の書き込みが終わった時に1度行えば十分だけど、
-                    // 非同期処理なので全部が終わったタイミングが分からない。なので冗長だけど毎回更新実施する。
-                    $("#" + charmaker.downLoadLinkID)
-                        .attr("href", dest.toDataURL())
-                        .attr("download", "mypic.png");
-                    // adobeが作った各部品用のdivの更新
                 };
-                console.log("charmaker.makeImage", "2.7", j);
                 img.src = srcFullSize;
-                console.log("charmaker.makeImage", "3", $(t.dest).css("background-image"), srcFullSize);
-                $(t.dest).css("background-image", srcFullSize)
-                console.log("charmaker.makeImage", "4", $(t.dest).css("background-image"));
+                // adobeが作った各部品用のdivの更新
+                if (!srcFullSize.startsWith("url")) srcFullSize = "url(" + srcFullSize + ")";
+                $(t.dest).css("background-image", srcFullSize);
             });
             return true;
         }
@@ -97,12 +90,17 @@ charmaker.makeImage = function (dest) {
 
 /**
  * イメージのダウンロードを行います
- * @param {canvas} src 作成元canvas要素
+ * @param {canvas} canvas 作成元canvas要素
  */
-charmaker.download = function (src) {
-    console.log("charmaker.download")
+charmaker.download = function (canvas) {
     var a = $("#" + charmaker.downLoadLinkID);
-    a[0].click();
+    a.attr("href", canvas.toDataURL())
+        .attr("download", "mypic.png")
+        .on("click", function () {
+            alert("a is clicked");
+            console.log("a is clicked", a);
+        })
+        .click();
 };
 
 /**
@@ -113,10 +111,8 @@ charmaker.init = function () {
 
     // charmaker_userconfigに定義されたサムネイル群に対する初期設定
     $.each(charmaker_userconfig.targets, function (i, x) {
-        // console.log("charmaker.init()", i, "1");
         var targets = $(x.selector);
 
-        console.log("charmaker.init()", i, "2", targets.length, targets);
         // 必ずひとつ選ぶ設定なら、指定されているもの（なければ便宜的に先頭を)選択状態にします。
         if (x.selectionRule == "oneAndOnlyOne" && 0 < targets.length) {
             var n = 0;
@@ -126,14 +122,13 @@ charmaker.init = function () {
             targets.eq(n).attr(charmaker.selectedAttributeName, true);
         }
 
-        // console.log("charmaker.init()", i, "3");
         // グループ毎にclickハンドラを設定
         targets.on("click",
             /**
              * ターゲット要素（div)のonClickハンドラ
              */
             function (e) {
-                console.log("on(click)", e);
+                console.log("targets.on(click)", e);
                 // クリックされた要素がすでに選択済かどうかを覚えておきます
                 var preSelected = $(e.target).attr(charmaker.selectedAttributeName);
                 if (x.selectionRule == "oneAndOnlyOne") {
@@ -149,22 +144,18 @@ charmaker.init = function () {
                 charmaker.makeImage(document.getElementById(charmaker_userconfig.targetCanvas.id));
                 return true;
             });
-        // console.log("charmaker.init()", i, "4");
     });
 
-    // console.log("charmaker.init()", "10");
     // ダウンロード用に必要なa要素の設定
-    $("<a id='" + charmaker.downLoadLinkID + "'>x</a>").appendTo("body", document).hide();
-    $("<canvas id='" + charmaker_userconfig.targetCanvas.id + "' width=" + charmaker_userconfig.targetCanvas.width + "height=" + charmaker_userconfig.targetCanvas.height + "></canvas>").appendTo("body", document).hide();
+    $("<a id='" + charmaker.downLoadLinkID + "'>x</a>").appendTo("body", document);//.hide();
+    $("<canvas id='" + charmaker_userconfig.targetCanvas.id + "'width=" + charmaker_userconfig.targetCanvas.width + " height=" + charmaker_userconfig.targetCanvas.height + "></canvas>").appendTo("body", document); //.hide();
 
-    // console.log("charmaker.init()", "20");
     // 画像ダウンロードイベントトリガー設定とイベント発生時処理
     $(charmaker_userconfig.downloadEventSource.selector).
         on(charmaker_userconfig.downloadEventSource.eventName,
         function () {
             charmaker.download(document.getElementById(charmaker_userconfig.targetCanvas.id));
         });
-    // console.log("charmaker.init()", "30");
 };
 
 // 読み込み元のドキュメントready時にオブジェクトを初期化します。

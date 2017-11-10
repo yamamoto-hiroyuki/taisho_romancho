@@ -68,7 +68,7 @@ var charmaker_userconfig = {
         /**
          * セレクタ
          */
-        selector : "#u3762",
+        selector: "#u3762",
         /**
          * トリガーイベント名
          */
@@ -88,19 +88,19 @@ var charmaker_userconfig = {
      * 重ね合わせの背景画像の指定（省略可）
      */
     backgroundImage: [
-	],
+    ],
 
     /**
      * サムネイル画像のsrcから取得したパスをフルサイズ画像のパスに変換するための、
      * 変換元正規表現
      */
-    regexpToConvertThambnailToFullsize: /\/images\/([\w-\.]+)t\.png\?crc=\d+/,
+    regexpToConvertThambnailToFullsize: /images\/([\w-\.]+)t\.png/,
 
     /**
      * サムネイル画像のsrcから取得したパスをフルサイズ画像のパスに変換するための、
      * 置換文字列
      */
-    replacementToConvertThambnailToFullsize: "/images/fullsize/$1.png"
+    replacementToConvertThambnailToFullsize: "images/fullsize/$1.png"
 
 
 };
