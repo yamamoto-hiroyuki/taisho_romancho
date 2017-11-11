@@ -27,7 +27,6 @@ var charmaker = {
         if (!matched) return null;
         var result = matched[0].replace(charmaker_userconfig.regexpToConvertThambnailToFullsize,
             charmaker_userconfig.replacementToConvertThambnailToFullsize);
-        console.log("getFullsizeSrc", thumbnailSrc, result);
         return result
     }
 };
@@ -93,14 +92,11 @@ charmaker.makeImage = function (dest) {
  * @param {canvas} canvas 作成元canvas要素
  */
 charmaker.download = function (canvas) {
+    console.log("charmaker.download", canvas);
     var a = $("#" + charmaker.downLoadLinkID);
     a.attr("href", canvas.toDataURL())
-        .attr("download", "mypic.png")
-        .on("click", function () {
-            alert("a is clicked");
-            console.log("a is clicked", a);
-        })
-        .click();
+        .attr("download", "mypic.png");
+    a.get(0).click();
 };
 
 /**
