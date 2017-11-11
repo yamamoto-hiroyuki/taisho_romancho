@@ -45,7 +45,6 @@ charmaker.makeImage = function (dest) {
 
     // グループ毎に画像を重ねていきます
     $.each(charmaker_userconfig.targets, function (i, t) {
-
         if (t.backgroudImages) {
             // このグループは背景画像グループなので、選択とか関係なしに描画します
             $.each(t.backgroudImages, function (j, u) {
@@ -61,8 +60,7 @@ charmaker.makeImage = function (dest) {
         }
 
         if (t.selector) {
-
-            // 現在のグループのセレクタで選ばれる要素群のうち、「選択済」のものを選んで、それらについて処理する
+            // 現在のグループのセレクタで選ばれる要素群のうち、「選択済」のものを選んで、それらについて処理します
             $(t.selector).filter("[" + charmaker.selectedAttributeName + "=true]").each(function (j, x) {
 
                 // サムネイル画像のsrcからフルサイズ画像のsrcを取得
@@ -84,7 +82,6 @@ charmaker.makeImage = function (dest) {
             return true;
         }
     });
-
 };
 
 /**
@@ -142,8 +139,9 @@ charmaker.init = function () {
             });
     });
 
-    // ダウンロード用に必要なa要素の設定
+    // ダウンロード用に必要なa要素の作成
     $("<a id='" + charmaker.downLoadLinkID + "'>x</a>").appendTo("body", document);//.hide();
+    // 画像生成に必要なcanvas要素の作成
     $("<canvas id='" + charmaker_userconfig.targetCanvas.id + "'width=" + charmaker_userconfig.targetCanvas.width + " height=" + charmaker_userconfig.targetCanvas.height + "></canvas>").appendTo("body", document); //.hide();
 
     // 画像ダウンロードイベントトリガー設定とイベント発生時処理
