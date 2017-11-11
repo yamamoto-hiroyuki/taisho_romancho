@@ -82,13 +82,6 @@ charmaker.makeImage = function (dest) {
             return true;
         }
     });
-    // copyright表示を重ねて表示します。
-    var img = new Image(dest.width, dest.height);
-    img.crossOrigin = "anonymous";
-    img.onload = function () {
-        context.drawImage(img, 0, 0, img.width, img.height);
-    };
-    img.src = "images/fullsize/copyright.png";
 };
 
 /**

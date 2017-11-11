@@ -14,6 +14,9 @@ var charmaker_userconfig = {
                 },
                 {
                     src: "images/01body-m.png"
+                },
+                {
+                    src: "images/fullsize/copyright.png"
                 }
             ]
         },
