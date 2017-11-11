@@ -58,8 +58,8 @@ var charmaker_userconfig = {
             initialSelectedIndex: 0
         },
         {   // 装飾
-            selector: "#u7427, #u7449, #u7460, #u7477, #u7474, #u7471, #u7512, #u7515, #u7518",
-            dest: "#u5480",
+            selector: "#u7427, #u7449, #u7460, #u7474, #u7471, #u7512, #u7515, #u7518",
+            dest: "#u15051",
             selectionRule: "oneAndOnlyOne",
             initialSelectedIndex: 0
         },
@@ -72,7 +72,7 @@ var charmaker_userconfig = {
         /**
          * セレクタ
          */
-        selector : "#u6143",
+        selector : "#u15094",
         /**
          * トリガーイベント名
          */

@@ -82,6 +82,13 @@ charmaker.makeImage = function (dest) {
             return true;
         }
     });
+    // copyright表示を重ねて表示します。
+    var img = new Image(dest.width, dest.height);
+    img.crossOrigin = "anonymous";
+    img.onload = function () {
+        context.drawImage(img, 0, 0, img.width, img.height);
+    };
+    img.src = "images/fullsize/copyright.png";
 };
 
 /**
@@ -140,9 +147,9 @@ charmaker.init = function () {
     });
 
     // ダウンロード用に必要なa要素の作成
-    $("<a id='" + charmaker.downLoadLinkID + "'>x</a>").appendTo("body", document);//.hide();
+    $("<a id='" + charmaker.downLoadLinkID + "'>x</a>").appendTo("body", document).hide();
     // 画像生成に必要なcanvas要素の作成
-    $("<canvas id='" + charmaker_userconfig.targetCanvas.id + "'width=" + charmaker_userconfig.targetCanvas.width + " height=" + charmaker_userconfig.targetCanvas.height + "></canvas>").appendTo("body", document); //.hide();
+    $("<canvas id='" + charmaker_userconfig.targetCanvas.id + "'width=" + charmaker_userconfig.targetCanvas.width + " height=" + charmaker_userconfig.targetCanvas.height + "></canvas>").appendTo("body", document).hide();
 
     // 画像ダウンロードイベントトリガー設定とイベント発生時処理
     $(charmaker_userconfig.downloadEventSource.selector).

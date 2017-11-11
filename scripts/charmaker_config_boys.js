@@ -68,7 +68,7 @@ var charmaker_userconfig = {
         /**
          * セレクタ
          */
-        selector: "#u3762",
+        selector: "#u15121",
         /**
          * トリガーイベント名
          */
