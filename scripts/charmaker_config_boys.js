@@ -65,6 +65,37 @@ var charmaker_userconfig = {
     ],
 
     /**
+     * パーツグループへのスクロールを行うアイコンの定義
+     */
+    scrollMenu: {
+        // 共通のオフセット
+        commonOffset: -1048,
+        // スクロールアイコン要素
+        elements: [
+            {
+                icon: "#u3787",
+                target: "#u3954"
+            },
+            {
+                icon: "#u3798",
+                target: "#u4183"
+            },
+            {
+                icon: "#u3809",
+                target: "#u4388"
+            },
+            {
+                icon: "#u3820",
+                target: "#u4832"
+            },
+            {
+                icon: "#u3831",
+                target: "#u5111"
+            }
+       ]
+    },
+
+    /**
      * 重ねあわせ画像ダウンロードイベントの発生元オブジェクトの情報。
      */
     downloadEventSource: {

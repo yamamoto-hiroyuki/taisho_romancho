@@ -139,7 +139,14 @@ charmaker.init = function () {
             });
     });
 
-    // ダウンロード用に必要なa要素の作成
+    $.each(charmaker_userconfig.scrollMenu.elements, function (i, x) {
+        $(x.icon).on("click", function () {
+            $("html,body").animate({ scrollTop: $(x.target).offset().top
+                 + charmaker_userconfig.scrollMenu.commonOffset  });
+        });
+    });
+    
+        // ダウンロード用に必要なa要素の作成
     $("<a id='" + charmaker.downLoadLinkID + "'>x</a>").appendTo("body", document).hide();
     // 画像生成に必要なcanvas要素の作成
     $("<canvas id='" + charmaker_userconfig.targetCanvas.id + "'width=" + charmaker_userconfig.targetCanvas.width + " height=" + charmaker_userconfig.targetCanvas.height + "></canvas>").appendTo("body", document).hide();
@@ -150,6 +157,14 @@ charmaker.init = function () {
         function () {
             charmaker.download(document.getElementById(charmaker_userconfig.targetCanvas.id));
         });
+
+    // スクロールメニューの設定
+    $("#u5494").on("click", function () {
+        $("html,body").animate({ scrollTop: $("#u7427").offset().top - 1000});
+    });
+    $("#u5489").on("click", function () {
+        $("html,body").animate({ scrollTop: $("#u7572").offset().top - 1000});
+    });
 };
 
 // 読み込み元のドキュメントready時にオブジェクトを初期化します。
