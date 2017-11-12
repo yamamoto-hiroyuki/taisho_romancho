@@ -8,7 +8,7 @@ var charmaker_userconfig = {
     targets: [
         {
             // 背景
-            backgroudImages: [
+            backgroundImages: [
                 {
                     src: "images/人物背景男_poster_.png"
                 },

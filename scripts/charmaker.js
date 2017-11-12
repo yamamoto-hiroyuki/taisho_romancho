@@ -41,10 +41,10 @@ charmaker.makeImage = function (canvas) {
 
     // グループ毎に画像を重ねていきます
     $.each(charmaker_userconfig.targets, function (i, t) {
-        if (t.backgroudImages) {
+        if (t.backgroundImages) {
             // とりあえず現状背景画像グループは画面には表示しないんだけど、
             // ダウンロード用画像のためにロードはしておきます。
-            $.each(t.backgroudImages, function (j, u) {
+            $.each(t.backgroundImages, function (j, u) {
                 var img = new Image(canvas.width, canvas.height);
                 img.src = u.src;
             });
@@ -77,50 +77,76 @@ charmaker.makeImage = function (canvas) {
 };
 
 /**
- * ダウンロード画像用のcanvasを描きます
+ * ターゲット要素毎に処理して再起で次に回します
+ * ロードが完了したら次に回すために再帰を使っています
+ * 再帰を使うのは、imgのロードが非同期だからです
+ * @param {canvas} canvas 更新先canvasオブジェクト
+ * @param {int} targetIndex charmaker_userconfig.targetsの何番目の要素をこの呼び出しで処理するか
+ * @param {function} endProc charmaker_userconfig.targetsをすべて処理した後に行う後処理
  */
-charmaker.makeupCanvas = function (canvas) {
-    console.log("charmaker.makeupCanvas", canvas);
+charmaker.processTarget = function (canvas, targetIndex, endProc) {
+    if (charmaker_userconfig.targets.length <= targetIndex) {
+        endProc();
+        return;
+    }
+    var context = canvas.getContext("2d");
+    var t = charmaker_userconfig.targets[targetIndex];
+    if (t.backgroundImages) {
+        // このグループは背景画像グループなので、選択とか関係なしに描画します
+        var processBackground = function (i) {
+            if (i == t.backgroundImages.length) {
+                charmaker.processTarget(canvas, targetIndex + 1, endProc);
+                return;
+            }
+            // Imageオブジェクトを作成してsrcを設定、ロードできたらcontextに描画
+            var img = new Image(canvas.width, canvas.height);
+            img.onload = function () {
+                context.drawImage(img, 0, 0, img.width, img.height);
+                processBackground(i + 1);
+            };
+            img.src = t.backgroundImages[i].src;
+        };
+        processBackground(0);
+        return;
+    }
+    if (t.selector) {
+        // 現在のグループのセレクタで選ばれる要素群のうち、「選択済」のものを選んで、それらについて処理します
+        var processSelected = function (i, selected) {
+            if (i == selected.length) {
+                charmaker.processTarget(canvas, targetIndex + 1, endProc);
+                return;
+            }
+            var x = selected.eq(i);
+            var srcFullSize = charmaker.getFullsizeSrc(
+                x.css("background-image"));
+            console.log("charmaker.makeupCanvas", "going to draw", srcFullSize);
+            // イメージを生成
+            var img = new Image(canvas.width, canvas.height);
+            img.crossOrigin = "anonymous";
+            img.onload = function () {
+                context.drawImage(img, 0, 0, img.width, img.height);
+                processSelected(i + 1, selected)
+            };
+            img.src = srcFullSize;
+        };
+        processSelected(0, $(t.selector).filter("[" + charmaker.selectedAttributeName + "=true]"));
+        return;
+    }
+}
 
+/**
+ * ダウンロード画像用のcanvasを描きます
+ * @param {canvas} 描画先canvasオブジェクト
+ * @param {function} ダウンロード処理後処理
+ */
+charmaker.makeupCanvas = function (canvas, endProc) {
+    console.log("charmaker.makeupCanvas", canvas);
     // 出力先canvasのコンテキストの初期化
     var context = canvas.getContext("2d");
     context.clearRect(0, 0, canvas.width, canvas.height);
 
     // グループ毎に画像を重ねていきます
-    $.each(charmaker_userconfig.targets, function (i, t) {
-        if (t.backgroudImages) {
-            // このグループは背景画像グループなので、選択とか関係なしに描画します
-            $.each(t.backgroudImages, function (j, u) {
-                // Imageオブジェクトを作成してsrcを設定、ロードできたらcontextに描画
-                var img = new Image(canvas.width, canvas.height);
-                img.onload = function () {
-                    // ここで使う画像はすでに画面表示のためにロードされているので同期的に処理しても大丈夫なはず。。。と思ったけど
-                    context.drawImage(img, 0, 0, img.width, img.height);
-                };
-                img.src = u.src;
-            });
-            return true; // means "continue;"
-        }
-
-        if (t.selector) {
-            // 現在のグループのセレクタで選ばれる要素群のうち、「選択済」のものを選んで、それらについて処理します
-            $(t.selector).filter("[" + charmaker.selectedAttributeName + "=true]").each(function (j, x) {
-                // サムネイル画像のsrcからフルサイズ画像のsrcを取得
-                var srcFullSize = charmaker.getFullsizeSrc(
-                    decodeURI($(x).css("background-image")));
-                console.log("charmaker.makeupCanvas", "going to draw", srcFullSize);
-                // イメージを生成
-                var img = new Image(canvas.width, canvas.height);
-                img.crossOrigin = "anonymous";
-                img.onload = function () {
-                    context.drawImage(img, 0, 0, img.width, img.height);
-                    console.log("charmaker.makeupCanvas", "drown", this.src);
-                };
-                img.src = srcFullSize;
-            });
-            return true; // means "continue;"
-        }
-    });
+    charmaker.processTarget(canvas, 0, endProc);
 }
 
 /**
@@ -129,15 +155,14 @@ charmaker.makeupCanvas = function (canvas) {
  */
 charmaker.download = function (canvas) {
     console.log("charmaker.download", canvas);
-    charmaker.makeupCanvas(canvas);
-    // makeupCanvasが非同期な部分があるので、
-    setTimeout(function () {
+    charmaker.makeupCanvas(canvas, function () {
+        // makeupCanvasが非同期な部分があるので継続渡しします
         var a = $("#" + charmaker.downLoadLinkID);
         a.attr("href", canvas.toDataURL())
             .attr("download", "mypic.png");
         // clickはjQueryオブジェクトに送ってもなぜかだめで、DOMエレメントに直接送るとうまくいく
         a.get(0).click();
-    }, １000);
+    });
 };
 
 /**
