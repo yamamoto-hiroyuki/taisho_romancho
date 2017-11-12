@@ -5,6 +5,14 @@ var charmaker_userconfig = {
      * グループ内の要素のclickイベントでその要素が選択されます。
      */
     targets: [
+        {
+            // 背景
+            backgroudImages: [
+                {
+                    src: "images/人物背景女_poster_.png"
+                }
+            ]
+        },
         {   // 髪飾り
             selector: "#u7477, #u7460",
             dest: "#u14340",
@@ -14,9 +22,6 @@ var charmaker_userconfig = {
         {
             // 背景
             backgroudImages: [
-                {
-                    src: "images/人物背景女_poster_.png"
-                },
                 {
                     src: "images/01body-w.png"
                 },
