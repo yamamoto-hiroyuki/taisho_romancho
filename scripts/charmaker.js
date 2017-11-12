@@ -37,18 +37,19 @@ var charmaker = {
  * @param {canvas} dest 作成先canvas要素
  */
 charmaker.makeImage = function (dest) {
-    console.log("charmaker.makeImage", dest);
+    console.log("charmaker.makeImage");
 
     // 出力先canvasのコンテキストの初期化
-    var context = dest.getContext("2d"); 
+    var context = dest.getContext("2d");
     context.clearRect(0, 0, dest.width, dest.height);
 
     // グループ毎に画像を重ねていきます
-    $.each(charmaker_userconfig.targets, function (i, t) {
+    //    $.each(charmaker_userconfig.targets, function (i, t) {
+    for (var i = 0; i < charmaker_userconfig.targets.length; i++) {
+        var t = charmaker_userconfig.targets[i];
         if (t.backgroudImages) {
             // このグループは背景画像グループなので、選択とか関係なしに描画します
             $.each(t.backgroudImages, function (j, u) {
-
                 // Imageオブジェクトを作成してsrcを設定、ロードできたらcontextに描画
                 var img = new Image(dest.width, dest.height);
                 img.onload = function () {
@@ -56,16 +57,19 @@ charmaker.makeImage = function (dest) {
                 };
                 img.src = u.src;
             });
-            return true; // means "continue;"
+            //            return true; // means "continue;"
+            continue;
         }
 
         if (t.selector) {
+            // 出力先divの初期化
+            $(t.dest).removeClass("background-image");
             // 現在のグループのセレクタで選ばれる要素群のうち、「選択済」のものを選んで、それらについて処理します
             $(t.selector).filter("[" + charmaker.selectedAttributeName + "=true]").each(function (j, x) {
-
                 // サムネイル画像のsrcからフルサイズ画像のsrcを取得
                 var srcFullSize = charmaker.getFullsizeSrc(
                     decodeURI($(x).css("background-image")));
+                console.log("charmaker.makeImage", "going to draw", srcFullSize);
                 // イメージを生成
                 var img = new Image(dest.width, dest.height);
                 img.crossOrigin = "anonymous";
@@ -73,15 +77,15 @@ charmaker.makeImage = function (dest) {
                     // img.srcの設定は非同期処理になるため、続きの処理はloadedハンドラで処理
                     // canvasのcontextに描き込み
                     context.drawImage(img, 0, 0, img.width, img.height);
+                    // adobeが作った各部品用のdivの更新
+                    if (!srcFullSize.startsWith("url")) srcFullSize = "url(" + srcFullSize + ")";
+                    $(t.dest).css("background-image", srcFullSize);
                 };
                 img.src = srcFullSize;
-                // adobeが作った各部品用のdivの更新
-                if (!srcFullSize.startsWith("url")) srcFullSize = "url(" + srcFullSize + ")";
-                $(t.dest).css("background-image", srcFullSize);
             });
-            return true;
+            continue;
         }
-    });
+    }
 };
 
 /**
@@ -106,14 +110,8 @@ charmaker.init = function () {
     $.each(charmaker_userconfig.targets, function (i, x) {
         var targets = $(x.selector);
 
-        // 必ずひとつ選ぶ設定なら、指定されているもの（なければ便宜的に先頭を)選択状態にします。
-        if (x.selectionRule == "oneAndOnlyOne" && 0 < targets.length) {
-            var n = 0;
-            if (x.initialSelectedIndex < targets.length) {
-                n = x.initialSelectedIndex;
-            }
-            targets.eq(n).attr(charmaker.selectedAttributeName, true);
-        }
+        // 初期選択の指定があれば選択状態にします
+        $(x.initialSelected).attr(charmaker.selectedAttributeName, true);
 
         // グループ毎にclickハンドラを設定
         targets.on("click",
@@ -124,14 +122,18 @@ charmaker.init = function () {
                 console.log("targets.on(click)", e);
                 // クリックされた要素がすでに選択済かどうかを覚えておきます
                 var preSelected = $(e.target).attr(charmaker.selectedAttributeName);
+                // グループ内のすべての要素の選択をいったんクリアし
+                targets.removeAttr(charmaker.selectedAttributeName);
                 if (x.selectionRule == "oneAndOnlyOne") {
-                    // グループ内のすべての要素の選択属性をクリアします。
-                    targets.removeAttr(charmaker.selectedAttributeName);
+                    // 必ずひとつ選ぶ設定なら
                     // クリックされた要素を選択済にします（最初に選択済なら結果的に変化なし）
                     $(e.target).attr(charmaker.selectedAttributeName, true);
-                } else if (x.selectionRule == "moreThanZero") {
-                    // 最初の選択状態の逆の状態を設定します。
-                    $(e.target).attr(charmaker.selectedAttributeName, !preSelected);
+                } else if (x.selectionRule == "zeroOrOne") {
+                    // どれも選択しないかひとつ選択するかいずれかの設定なら
+                    // クリックされた要素が最初未選択だった時に限り選択済にします
+                    if (!preSelected) {
+                        $(e.target).attr(charmaker.selectedAttributeName, true);
+                    }
                 }
                 // 選択が変更されるたびに、重ね合わせ画像を再作成します。
                 charmaker.makeImage(document.getElementById(charmaker_userconfig.targetCanvas.id));
@@ -141,12 +143,14 @@ charmaker.init = function () {
 
     $.each(charmaker_userconfig.scrollMenu.elements, function (i, x) {
         $(x.icon).on("click", function () {
-            $("html,body").animate({ scrollTop: $(x.target).offset().top
-                 + charmaker_userconfig.scrollMenu.commonOffset  });
+            $("html,body").animate({
+                scrollTop: $(x.target).offset().top
+                + charmaker_userconfig.scrollMenu.commonOffset
+            });
         });
     });
-    
-        // ダウンロード用に必要なa要素の作成
+
+    // ダウンロード用に必要なa要素の作成
     $("<a id='" + charmaker.downLoadLinkID + "'>x</a>").appendTo("body", document).hide();
     // 画像生成に必要なcanvas要素の作成
     $("<canvas id='" + charmaker_userconfig.targetCanvas.id + "'width=" + charmaker_userconfig.targetCanvas.width + " height=" + charmaker_userconfig.targetCanvas.height + "></canvas>").appendTo("body", document).hide();
@@ -157,14 +161,6 @@ charmaker.init = function () {
         function () {
             charmaker.download(document.getElementById(charmaker_userconfig.targetCanvas.id));
         });
-
-    // スクロールメニューの設定
-    $("#u5494").on("click", function () {
-        $("html,body").animate({ scrollTop: $("#u7427").offset().top - 1000});
-    });
-    $("#u5489").on("click", function () {
-        $("html,body").animate({ scrollTop: $("#u7572").offset().top - 1000});
-    });
 };
 
 // 読み込み元のドキュメントready時にオブジェクトを初期化します。

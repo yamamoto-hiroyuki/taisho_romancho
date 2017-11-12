@@ -24,43 +24,43 @@ var charmaker_userconfig = {
             selector: "#u3954, #u3965, #u3968",
             dest: "#u4319",
             selectionRule: "oneAndOnlyOne",
-            initialSelectedIndex: 0
+            initialSelected: "#u3954"
         },
         {   // 目
             selector: "#u3993, #u3996, #u3999",
             dest: "#u4330",
             selectionRule: "oneAndOnlyOne",
-            initialSelectedIndex: 0
+            initialSelected: "#u3993"
         },
         {	// 口
             selector: "#u4032, #u4029, #u4026, u4068",
             dest: "#u4341",
             selectionRule: "oneAndOnlyOne",
-            initialSelectedIndex: 0
+            initialSelected: "#u4032"
         },
         {	// 髪
             selector: "#u4183, #u4180, #u4159, #u4252, #u4231",
             dest: "#u4352",
             selectionRule: "oneAndOnlyOne",
-            initialSelectedIndex: 0
+            initialSelected: "#u4183"
         },
         {	// 服
             selector: "#u4388, #u4373, #u4356, #u4538, #u4526, #u4505, #u4565, #u4553, #u4550, #u4601, #u4598, #u4586, #u4646, #u4625, #u4613",
             dest: "#u5437",
             selectionRule: "oneAndOnlyOne",
-            initialSelectedIndex: 0
+            initialSelected: "#u4388"
         },
         {	// 靴
             selector: "#u4832, #u4820, #u4799, #u4892, #u4880, #u4868, #u4920",
             dest: "#u4427",
             selectionRule: "oneAndOnlyOne",
-            initialSelectedIndex: 0
+            initialSelected: "#u4832"
         },
         {   // 装飾
             selector: "#u5111, #u5112, #u5106, #u5070, #u5073, #u5069, #u5035, #u5032, #u5036, #u4997, #u4994, #u4991",
             dest: "#u5448",
             selectionRule: "oneAndOnlyOne",
-            initialSelectedIndex: 0
+            initialSelected: "#u5111"
         },
     ],
 

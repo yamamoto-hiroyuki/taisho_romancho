@@ -6,9 +6,10 @@ var charmaker_userconfig = {
      */
     targets: [
         {   // 髪飾り
-            selector: "#u7477",
+            selector: "#u7477, #u7460",
             dest: "#u14340",
-            selectionRule: "moreThanZero",
+            selectionRule: "zeroOrOne",
+            initialSelected: "#u7477"
         },
         {
             // 背景
@@ -28,43 +29,43 @@ var charmaker_userconfig = {
             selector: "#u8176, #u8179, #u8182",
             dest: "#u5483",
             selectionRule: "oneAndOnlyOne",
-            initialSelectedIndex: 0
+            initialSelected: "#u8179"
         },
         {   // 目
             selector: "#u8173, #u8170, #u8167",
             dest: "#u5491",
             selectionRule: "oneAndOnlyOne",
-            initialSelectedIndex: 0
+            initialSelected: "#u8173"
         },
         {	// 口
             selector: "#u8158, #u8161, #u8164, #u8155",
             dest: "#u5495",
             selectionRule: "oneAndOnlyOne",
-            initialSelectedIndex: 0
+            initialSelected: "#u8161"
         },
         {	// 髪
             selector: "#u8002, #u7999, #u7996, #u7987, #u7990, #u7993, #u7984, #u7981, #u7978, #u7969, #u7972, #u7975, #u7966, #u7963, #u7960",
             dest: "#u5479",
             selectionRule: "oneAndOnlyOne",
-            initialSelectedIndex: 0
-        },
-        {	// 服
-            selector: "#u7821, #u7818, #u7815, #u7806, #u7809, #u7812, #u7803, #u7800, #u7797, #u7788, #u7791, #u7794, #u7785, #u7782, #u7779",
-            dest: "#u5481",
-            selectionRule: "oneAndOnlyOne",
-            initialSelectedIndex: 0
+            initialSelected: "#u8002"
         },
         {	// 靴
             selector: "#u7572, #u7569, #u7566, #u7539, #u7542, #u7545, #u7548, #u7551, #u7554, #u7557, #u7560, #u7563",
             dest: "#u5482",
             selectionRule: "oneAndOnlyOne",
-            initialSelectedIndex: 0
+            initialSelected: "#u7572"
+        },
+        {	// 服
+            selector: "#u7821, #u7818, #u7815, #u7806, #u7809, #u7812, #u7803, #u7800, #u7797, #u7788, #u7791, #u7794, #u7785, #u7782, #u7779",
+            dest: "#u5481",
+            selectionRule: "oneAndOnlyOne",
+            initialSelected: "#u7818"
         },
         {   // 装飾
-            selector: "#u7427, #u7449, #u7460, #u7474, #u7471, #u7512, #u7515, #u7518",
+            selector: "#u7427, #u7449, #u7474, #u7471, #u7512, #u7515, #u7518",
             dest: "#u15051",
             selectionRule: "oneAndOnlyOne",
-            initialSelectedIndex: 0
+            initialSelected: "#u7518"
         },
     ],
 
