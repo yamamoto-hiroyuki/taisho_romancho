@@ -56,20 +56,20 @@ var charmaker_userconfig = {
         },
         {	// 靴
             selector: "#u7572, #u7569, #u7566, #u7539, #u7542, #u7545, #u7548, #u7551, #u7554, #u7557, #u7560, #u7563",
-            dest: "#u5482",
+            dest: "#u5481",
             selectionRule: "oneAndOnlyOne",
             initialSelected: "#u7572"
         },
         {	// 服
             selector: "#u7821, #u7818, #u7815, #u7806, #u7809, #u7812, #u7803, #u7800, #u7797, #u7788, #u7791, #u7794, #u7785, #u7782, #u7779",
-            dest: "#u5481",
+            dest: "#u5482",
             selectionRule: "oneAndOnlyOne",
             initialSelected: "#u7818"
         },
         {   // 装飾
             selector: "#u7427, #u7449, #u7474, #u7471, #u7512, #u7515, #u7518",
             dest: "#u15051",
-            selectionRule: "oneAndOnlyOne",
+            selectionRule: "zeroOrOne",
             initialSelected: "#u7518"
         },
     ],
