@@ -59,7 +59,7 @@ var charmaker_userconfig = {
         {   // 装飾
             selector: "#u5111, #u5112, #u5106, #u5070, #u5073, #u5069, #u5035, #u5032, #u5036, #u4997, #u4994, #u4991",
             dest: "#u5448",
-            selectionRule: "oneAndOnlyOne",
+            selectionRule: "zeroOrOne",
             initialSelected: "#u5111"
         },
     ],
