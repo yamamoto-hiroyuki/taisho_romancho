@@ -39,3 +39,28 @@
 .clear {
     clear: both;
 }
+
+#display {
+	width: 240px;
+	height: 240px;
+	position: relative;
+	background-color: green;
+}
+#layer_background {
+	width: 240px;
+	height: 240px;
+	position: absolute;
+	background-image: url(images/background.png);
+}
+#layer_hair {
+	width: 240px;
+	height: 240px;
+	position: absolute;
+	background-image: url(images/fullsize/hair1.png);
+}
+#layer_cloth {
+	width: 240px;
+	height: 240px;
+	position: absolute;
+	background-image: url(images/fullsize/cloth1.png);
+}
