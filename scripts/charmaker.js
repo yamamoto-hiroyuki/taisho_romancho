@@ -59,11 +59,13 @@ charmaker.makeImageForDisplay = function (width, height, changed) {
                 }
                 // 単純に切り替えると乱暴になるので、スーッと入れ替える
                 var origin = $(t.dest).eq(0);
-                var clone = origin.clone();
+                var clone = origin.clone().hide();
                 origin.after(clone);
-                origin.css("background-image", srcFullSize);
-                clone.fadeOut(1000, function() { clone.remove(); });
-                console.log("charmaker.makeImageForDisplay", "drew", srcFullSize);
+                clone.fadeIn(800, function() {
+					origin.css("background-image", srcFullSize);
+					clone.fadeOut(800, function() { clone.remove(); });
+					console.log("charmaker.makeImageForDisplay", "drew", srcFullSize);
+				});
 			} else {
 				// アイテム選択が取り消されたなら消す描画
 				$(t.dest).css("background-image", "none")
