@@ -54,17 +54,16 @@ charmaker.makeImageForDisplay = function (width, height, changed) {
 				var srcFullSize = charmaker.getFullsizeSrc(
 					decodeURI($(this).css("background-image")));
 				console.log("charmaker.makeImageForDisplay", "going to draw", srcFullSize);
-				// イメージを生成
-				var img = new Image(width, height);
-				img.crossOrigin = "anonymous";
-				img.onload = function () {
-					if (!srcFullSize.startsWith("url")) {
-						srcFullSize = "url(" + srcFullSize + ")";
-					}
-					$(t.dest).css("background-image", srcFullSize);
-					console.log("charmaker.makeImageForDisplay", "drew", srcFullSize);
-				};
-				img.src = srcFullSize;
+                if (!srcFullSize.startsWith("url")) {
+                    srcFullSize = "url(" + srcFullSize + ")";
+                }
+                // 単純に切り替えると乱暴になるので、スーッと入れ替える
+                var origin = $(t.dest).eq(0);
+                var clone = origin.clone();
+                origin.after(clone);
+                origin.css("background-image", srcFullSize);
+                clone.fadeOut(1000, function() { clone.remove(); });
+                console.log("charmaker.makeImageForDisplay", "drew", srcFullSize);
 			} else {
 				// アイテム選択が取り消されたなら消す描画
 				$(t.dest).css("background-image", "none")
