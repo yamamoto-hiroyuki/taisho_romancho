@@ -36,7 +36,7 @@ var charmaker_userconfig = {
             selector: "#u4032, #u4029, #u4026, u4068",
             dest: "#u4341",
             selectionRule: "oneAndOnlyOne",
-            initialSelected: "#u4032"
+            initialSelected: "#u4029"
         },
         {	// 髪
             selector: "#u4183, #u4180, #u4159, #u4252, #u4231",
