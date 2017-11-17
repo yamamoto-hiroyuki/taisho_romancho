@@ -32,10 +32,10 @@ var charmaker = {
 };
 
 /**
- * 表示イメージの重ねあわせを行います
+ * 表示イメージを作成します。
  * 各グループ毎の出力先(targets[i].destでselectされるもの)に書き出します。
- * @param {integer} width
- * @param {integer} height 
+ * @param {integer} width 出力先画像幅
+ * @param {integer} height 出力先画像高さ
  * @param {element} changed 変更された要素
  */
 charmaker.makeImageForDisplay = function (width, height, changed) {
@@ -197,6 +197,7 @@ charmaker.init = function () {
             });
     });
 
+    // アンカーへのリンクを設定します
     $.each(charmaker_userconfig.scrollMenu.elements, function (i, x) {
         $(x.icon).on("click", function () {
             $("html,body").animate({
@@ -209,7 +210,8 @@ charmaker.init = function () {
     // ダウンロード用に必要なa要素の作成
     $("<a id='" + charmaker.downLoadLinkID + "'>x</a>").
         appendTo("body", document).hide();
-    // 画像生成に必要なcanvas要素の作成
+
+        // 画像生成に必要なcanvas要素の作成
     $("<canvas id='" + charmaker_userconfig.targetCanvas.id +
         "' width=" + charmaker_userconfig.targetCanvas.width +
         " height=" + charmaker_userconfig.targetCanvas.height +
