@@ -165,7 +165,7 @@ charmaker.init = function () {
 
         // 初期選択の指定があれば選択状態にします
         $(x.initialSelected).attr(charmaker.selectedAttributeName, true);
-
+        
         // グループ毎にclickハンドラを設定
         targets.on("click",
             /**
