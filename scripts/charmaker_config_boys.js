@@ -24,7 +24,7 @@ var charmaker_userconfig = {
             selector: "#u3954, #u3965, #u3968",
             dest: "#u4319",
             selectionRule: "oneAndOnlyOne",
-            initialSelected: "#u3954"
+            initialSelected: "#u3968"
         },
         {   // 目
             selector: "#u3993, #u3996, #u3999",
@@ -101,7 +101,7 @@ var charmaker_userconfig = {
                 icon: "#u3831",
                 target: "#u5111"
             }
-       ]
+        ]
     },
 
     /**
@@ -143,7 +143,10 @@ var charmaker_userconfig = {
      * サムネイル画像のsrcから取得したパスをフルサイズ画像のパスに変換するための、
      * 置換文字列
      */
-    replacementToConvertThambnailToFullsize: "images/fullsize/$1.png"
+    replacementToConvertThambnailToFullsize: "images/fullsize/$1.png",
 
-
+    /**
+     * 画像をダウンロードするときのconfirmメッセージ
+     */
+    downloadConfirmMessage: "着せ替え画像をダウンロードしますか？"
 };

@@ -17,7 +17,6 @@ var charmaker_userconfig = {
             selector: "#u7477, #u7460",
             dest: "#u14340",
             selectionRule: "zeroOrOne",
-            initialSelected: "#u7477"
         },
         {
             // 背景(z-index:202)
@@ -58,13 +57,13 @@ var charmaker_userconfig = {
             selector: "#u7572, #u7569, #u7566, #u7539, #u7542, #u7545, #u7548, #u7551, #u7554, #u7557, #u7560, #u7563",
             dest: "#u5481",
             selectionRule: "oneAndOnlyOne",
-            initialSelected: "#u7572"
+            initialSelected: "#u7554"
         },
         {	// 服(z-index:208)
             selector: "#u7821, #u7818, #u7815, #u7806, #u7809, #u7812, #u7803, #u7800, #u7797, #u7788, #u7791, #u7794, #u7785, #u7782, #u7779",
             dest: "#u5482",
             selectionRule: "oneAndOnlyOne",
-            initialSelected: "#u7818"
+            initialSelected: "#u7821"
         },
         {   // 装飾イヤリング(z-index:209)
             selector: "#u7471",
@@ -128,7 +127,7 @@ var charmaker_userconfig = {
         /**
          * セレクタ
          */
-        selector : "#u15094",
+        selector: "#u15094",
         /**
          * トリガーイベント名
          */
@@ -160,7 +159,10 @@ var charmaker_userconfig = {
      * サムネイル画像のsrcから取得したパスをフルサイズ画像のパスに変換するための、
      * 置換文字列
      */
-    replacementToConvertThambnailToFullsize: "images/fullsize/$1.png"
+    replacementToConvertThambnailToFullsize: "images/fullsize/$1.png",
 
-
+    /**
+      * 画像をダウンロードするときのconfirmメッセージ
+      */
+    downloadConfirmMessage: "着せ替え画像をダウンロードしますか？"
 };

@@ -41,19 +41,19 @@ var charmaker = {
 charmaker.makeImageForDisplay = function (width, height, changed) {
     console.log("charmaker.makeImageForDisplay");
 
-	// 全部再描画しなくても、選択されたグループだけ書きなおせば...
+    // 全部再描画しなくても、選択されたグループだけ書きなおせば...
     $.each(charmaker_userconfig.targets, function (i, t) {
-		var found = false;
-		$(t.selector).each(function () {
-			if (this != changed) {
-				return true;
-			}
-			// 変更のあったdivがみつかったら
-			if ($(this).attr(charmaker.selectedAttributeName)) {
-				// 新しいアイテムが選ばれたならばそれを描きます
-				var srcFullSize = charmaker.getFullsizeSrc(
-					decodeURI($(this).css("background-image")));
-				console.log("charmaker.makeImageForDisplay", "going to draw", srcFullSize);
+        var found = false;
+        $(t.selector).each(function () {
+            if (this != changed) {
+                return true;
+            }
+            // 変更のあったdivがみつかったら
+            if ($(this).attr(charmaker.selectedAttributeName)) {
+                // 新しいアイテムが選ばれたならばそれを描きます
+                var srcFullSize = charmaker.getFullsizeSrc(
+                    decodeURI($(this).css("background-image")));
+                console.log("charmaker.makeImageForDisplay", "going to draw", srcFullSize);
                 if (!srcFullSize.startsWith("url")) {
                     srcFullSize = "url(" + srcFullSize + ")";
                 }
@@ -61,20 +61,20 @@ charmaker.makeImageForDisplay = function (width, height, changed) {
                 var origin = $(t.dest).eq(0);
                 var clone = origin.clone().hide();
                 origin.after(clone);
-                clone.fadeIn(800, function() {
-					origin.css("background-image", srcFullSize);
-					clone.fadeOut(800, function() { clone.remove(); });
-					console.log("charmaker.makeImageForDisplay", "drew", srcFullSize);
-				});
-			} else {
-				// アイテム選択が取り消されたなら消す描画
-				$(t.dest).css("background-image", "none")
-			}
-			found = true;
-			return false;
-		});
-		return !found;
-	});
+                clone.fadeIn(800, function () {
+                    origin.css("background-image", srcFullSize);
+                    clone.fadeOut(800, function () { clone.remove(); });
+                    console.log("charmaker.makeImageForDisplay", "drew", srcFullSize);
+                });
+            } else {
+                // アイテム選択が取り消されたなら消す描画
+                $(t.dest).css("background-image", "none")
+            }
+            found = true;
+            return false;
+        });
+        return !found;
+    });
 };
 
 /**
@@ -87,8 +87,8 @@ charmaker.makeupCanvasForDownload = function (canvas, endProc) {
     var context = canvas.getContext("2d");
     context.clearRect(0, 0, canvas.width, canvas.height);
 
-	var images = [];
-	var loaded = 0;
+    var images = [];
+    var loaded = 0;
 
     // グループ毎に画像を重ねていきます
     $.each(charmaker_userconfig.targets, function (i, t) {
@@ -99,9 +99,9 @@ charmaker.makeupCanvasForDownload = function (canvas, endProc) {
                 console.log("charmaker.makeupCanvasForDownload", "going to draw", u.src);
                 var img = new Image(canvas.width, canvas.height);
                 img.onload = function () {
-					loaded++;
+                    loaded++;
                 };
-				images.push(img);
+                images.push(img);
                 img.src = u.src;
             });
             return true; // means "continue;"
@@ -118,19 +118,19 @@ charmaker.makeupCanvasForDownload = function (canvas, endProc) {
                 var img = new Image(canvas.width, canvas.height);
                 img.crossOrigin = "anonymous";
                 img.onload = function () {
-					loaded++;
-					if (images.length == loaded) {
-						// images設定が走りきってから割り込みが入ると期待してます
-						// 数が追いつくのはすべてがloadされたとき
-						// targetsの並び順にcontextに書き込む
-						$.each(images, function (k, y) {
-							context.drawImage(y, 0, 0, y.width, y.height);
-							console.log("charmaker.makeupCanvasForDownload", "drew", y.src);
-						});
-						endProc();
-					}
+                    loaded++;
+                    if (images.length == loaded) {
+                        // images設定が走りきってから割り込みが入ると期待してます
+                        // 数が追いつくのはすべてがloadされたとき
+                        // targetsの並び順にcontextに書き込む
+                        $.each(images, function (k, y) {
+                            context.drawImage(y, 0, 0, y.width, y.height);
+                            console.log("charmaker.makeupCanvasForDownload", "drew", y.src);
+                        });
+                        endProc();
+                    }
                 };
-				images.push(img);
+                images.push(img);
                 img.src = srcFullSize;
             });
             return true; // means "continue;"
@@ -138,19 +138,24 @@ charmaker.makeupCanvasForDownload = function (canvas, endProc) {
     });
 }
 
+charmaker.confirmDownload = function () {
+    return window.confirm(charmaker_userconfig.downloadConfirmMessage);
+};
+
 /**
  * イメージのダウンロードを行います
  * @param {canvas} canvas 作成元canvas要素
  */
 charmaker.download = function (canvas) {
-	console.log("charmaker.download", canvas);
-	charmaker.makeupCanvasForDownload(canvas, function () {
-		var a = $("#" + charmaker.downLoadLinkID);
-		a.attr("href", canvas.toDataURL())
-			.attr("download", "mypic.png");
-		// clickはjQueryオブジェクトに送ってもなぜかだめで、DOMエレメントに直接送るとうまくいく
-		a.get(0).click();
-	});
+    console.log("charmaker.download", canvas);
+    if (!charmaker.confirmDownload()) return;
+    charmaker.makeupCanvasForDownload(canvas, function () {
+        var a = $("#" + charmaker.downLoadLinkID);
+        a.attr("href", canvas.toDataURL())
+            .attr("download", "mypic.png");
+        // clickはjQueryオブジェクトに送ってもなぜかだめで、DOMエレメントに直接送るとうまくいく
+        a.get(0).click();
+    });
 };
 
 /**
@@ -165,7 +170,7 @@ charmaker.init = function () {
 
         // 初期選択の指定があれば選択状態にします
         $(x.initialSelected).attr(charmaker.selectedAttributeName, true);
-        
+
         // グループ毎にclickハンドラを設定
         targets.on("click",
             /**
@@ -190,9 +195,9 @@ charmaker.init = function () {
                 }
                 // 選択が変更されるたびに、重ね合わせ画像を再作成します。
                 charmaker.makeImageForDisplay(
-					charmaker_userconfig.targetCanvas.width, 
-					charmaker_userconfig.targetCanvas.height,
-					e.target);
+                    charmaker_userconfig.targetCanvas.width,
+                    charmaker_userconfig.targetCanvas.height,
+                    e.target);
                 return true;
             });
     });
@@ -211,7 +216,7 @@ charmaker.init = function () {
     $("<a id='" + charmaker.downLoadLinkID + "'>x</a>").
         appendTo("body", document).hide();
 
-        // 画像生成に必要なcanvas要素の作成
+    // 画像生成に必要なcanvas要素の作成
     $("<canvas id='" + charmaker_userconfig.targetCanvas.id +
         "' width=" + charmaker_userconfig.targetCanvas.width +
         " height=" + charmaker_userconfig.targetCanvas.height +
