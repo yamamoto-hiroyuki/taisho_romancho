@@ -33,7 +33,7 @@ var charmaker_userconfig = {
             initialSelected: "#u3993"
         },
         {	// 口
-            selector: "#u4032, #u4029, #u4026, u4068",
+            selector: "#u4032, #u4029, #u4026, #u4068",
             dest: "#u4341",
             selectionRule: "oneAndOnlyOne",
             initialSelected: "#u4029"
